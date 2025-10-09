@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Courses</title>
+</head>
+<body>
+<h1>Courses List</h1>
+
+<a href="/courses/new">Add New Course</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Teacher</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Created</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="course : ${courses}">
+        <td th:text="${course.title}"></td>
+        <td th:text="${course.teacher?.username}"></td>
+        <td th:text="${course.category}"></td>
+        <td th:text="${course.price}"></td>
+        <td th:text="${#temporals.format(course.createdAt, 'dd.MM.yyyy')}"></td>
+        <td>
+            <a th:href="@{/courses/edit/{id}(id=${course.id})}">Edit</a>
+            <a th:href="@{/courses/delete/{id}(id=${course.id})}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
