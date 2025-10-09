@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>New Course</title>
+</head>
+<body>
+<h1>Create New Course</h1>
+
+<form th:action="@{/courses/save}" method="post" th:object="${course}">
+    <div>
+        <label>Title:</label>
+        <input type="text" th:field="*{title}" required>
+    </div>
+
+    <div>
+        <label>Description:</label>
+        <label>
+            <textarea th:field="*{description}" rows="4"></textarea>
+        </label>
+    </div>
+
+    <div>
+        <label>Teacher ID:</label>
+        <label>
+            <input type="number" th:field="*{teacher.id}" required>
+        </label>
+    </div>
+
+    <div>
+        <label>Price:</label>
+        <label>
+            <input type="number" th:field="*{price}" step="0.01" min="0">
+        </label>
+    </div>
+
+    <div>
+        <label>Category:</label>
+        <label>
+            <input type="text" th:field="*{category}">
+        </label>
+    </div>
+
+    <div>
+        <button type="submit">Save Course</button>
+        <a href="/courses/list">Cancel</a>
+    </div>
+</form>
+</body>
+</html>
