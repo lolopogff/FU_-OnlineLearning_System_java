@@ -20,13 +20,6 @@
     </div>
 
     <div>
-        <label>Teacher ID:</label>
-        <label>
-            <input type="number" th:field="*{teacher.id}" required>
-        </label>
-    </div>
-
-    <div>
         <label>Price:</label>
         <label>
             <input type="number" th:field="*{price}" step="0.01" min="0">
@@ -42,8 +35,15 @@
 
     <div>
         <button type="submit">Save Course</button>
-        <a href="/courses/list">Cancel</a>
+        <a href="/courses/">Cancel</a>
     </div>
+
+    <div>
+        <a href="/courses/">
+            <button type="submit">Назад</button>
+        </a>
+    </div>
+
 </form>
 </body>
 </html>
