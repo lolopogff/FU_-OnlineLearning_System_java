@@ -17,7 +17,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User save(User user) {
+    public void save(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
@@ -26,7 +26,7 @@ public class UserService {
         }
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
 
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public Optional<User> findByUsername(String username) {

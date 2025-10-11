@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои курсы</title>
+</head>
+<body>
+<h1>Мои курсы</h1>
+
+<div th:if="${#lists.isEmpty(my_courses)}">
+    <p>У вас пока нет курсов</p>
+</div>
+
+<div th:unless="${#lists.isEmpty(my_courses)}">
+    <div th:each="course : ${my_courses}">
+        <h3 th:text="${course.title}">Название курса</h3>
+        <p th:text="${course.description}">Описание курса</p>
+        <p>Цена: <span th:text="${course.price}">0</span></p>
+        <p>Категория: <span th:text="${course.category}">Категория</span></p>
+        <hr>
+    </div>
+</div>
+
+<div>
+    <a href="/courses/">
+        <button type="submit">Назад</button>
+    </a>
+</div>
+
+</body>
+</html>
