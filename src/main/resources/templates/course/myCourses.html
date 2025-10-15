@@ -1,31 +1,126 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Мои курсы</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Courses - Course Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-<h1>Мои курсы</h1>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/courses/">
+            <i class="fas fa-graduation-cap"></i> Course Manager
+        </a>
 
-<div th:if="${#lists.isEmpty(my_courses)}">
-    <p>У вас пока нет курсов</p>
-</div>
+        <div class="d-flex align-items-center mx-3" style="min-width: 300px;">
+            <form th:action="@{/courses/}" method="get" class="w-100">
+                <div class="input-group input-group-sm">
+                    <input type="text"
+                           class="form-control"
+                           name="search"
+                           th:value="${param.search}"
+                           placeholder="Search courses..."
+                           style="border-radius: 20px 0 0 20px;">
+                    <button type="submit" class="btn btn-primary" style="border-radius: 0;">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <a th:if="${param.search}"
+                       th:href="@{/courses/}"
+                       class="btn btn-outline-light"
+                       style="border-radius: 0 20px 20px 0; border-left: 1px solid #495057;">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
 
-<div th:unless="${#lists.isEmpty(my_courses)}">
-    <div th:each="course : ${my_courses}">
-        <h3 th:text="${course.title}">Название курса</h3>
-        <p th:text="${course.description}">Описание курса</p>
-        <p>Цена: <span th:text="${course.price}">0</span></p>
-        <p>Категория: <span th:text="${course.category}">Категория</span></p>
-        <hr>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" th:href="@{/courses/}">All Courses</a>
+            <a class="nav-link" th:href="@{/logout}">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <!-- Проверка доступа -->
+    <div th:if="${not isTeacher and not isAdmin}" class="alert alert-danger">
+        <h4>Access Denied</h4>
+        <p>You don't have permission to view this page. This page is only for teachers and administrators.</p>
+        <a th:href="@{/courses/}" class="btn btn-primary">Go to Courses</a>
+    </div>
+
+    <div th:if="${isTeacher or isAdmin}">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-user-circle text-info"></i> My Created Courses</h2>
+            <a th:href="@{/courses/new}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create New Course
+            </a>
+        </div>
+
+        <div class="row">
+            <div th:each="course : ${my_courses}" class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0" th:text="${course.title}">Course Title</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text" th:text="${course.description != null} ? ${course.description} : 'No description available'">
+                            Course description
+                        </p>
+                        <div class="course-meta">
+                            <div class="mb-2">
+                                <small class="text-muted">
+                                    <i class="fas fa-tag"></i>
+                                    Category:
+                                    <span th:if="${course.category != null}" th:text="${course.category}">Category</span>
+                                    <span th:if="${course.category == null}">Not specified</span>
+                                </small>
+                            </div>
+                            <div class="mb-2">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar"></i>
+                                    Created:
+                                    <span th:if="${course.createdAt != null}" th:text="${#temporals.format(course.createdAt, 'dd MMM yyyy')}">Date</span>
+                                    <span th:if="${course.createdAt == null}">Unknown</span>
+                                </small>
+                            </div>
+                            <div class="mb-2">
+                                <small class="text-muted">
+                                    <i class="fas fa-users"></i>
+                                    Students enrolled:
+                                    <span th:text="${course.enrollments != null} ? ${course.enrollments.size()} : 0">0</span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group w-100" role="group">
+                            <a th:href="@{/courses/edit/{id}(id=${course.id})}"
+                               class="btn btn-outline-warning btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a th:href="@{/courses/delete/{id}(id=${course.id})}"
+                               class="btn btn-outline-danger btn-sm"
+                               onclick="return confirm('Are you sure you want to delete this course?')">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${my_courses == null or my_courses.isEmpty()}" class="text-center py-5">
+            <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+            <h4 class="text-muted">No Courses Created Yet</h4>
+            <p class="text-muted">You haven't created any courses yet. Start by creating your first course!</p>
+            <a th:href="@{/courses/new}" class="btn btn-primary">Create Your First Course</a>
+        </div>
     </div>
 </div>
 
-<div>
-    <a href="/courses/">
-        <button type="submit">Назад</button>
-    </a>
-</div>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

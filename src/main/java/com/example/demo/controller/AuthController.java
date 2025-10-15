@@ -30,6 +30,8 @@ public class AuthController {
     @PostMapping("/register")
     public String register(@ModelAttribute User user, Model model) {
         try {
+            // Теперь форма предоставляет только STUDENT или TEACHER,
+            // поэтому дополнительная валидация не нужна
             userService.save(user);
             return "redirect:/auth/login?success";
         } catch (Exception e) {
