@@ -1,57 +1,104 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
-  <title>Register</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Course Management System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<h1>Register</h1>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title mb-0">Create New Account</h4>
+        </div>
+        <div class="card-body">
+          <div th:if="${error}" class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span th:text="${error}">Error message</span>
+          </div>
 
-<div th:if="${error}" th:text="${error}" style="color: red;"></div>
+          <form method="post" th:action="@{/auth/register}" th:object="${user}">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username *</label>
+              <input type="text" class="form-control" id="username"
+                     name="username" required
+                     placeholder="Choose a unique username"
+                     th:field="*{username}">
+              <div class="form-text">This will be your login name</div>
+            </div>
 
-<form th:action="@{/auth/register}" method="post" th:object="${user}">
-  <div>
-    <label>Username:</label>
-    <label>
-      <input type="text" th:field="*{username}" required>
-    </label>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address *</label>
+              <input type="email" class="form-control" id="email"
+                     name="email" required
+                     placeholder="your.email@example.com"
+                     th:field="*{email}">
+            </div>
+
+            <div class="mb-3">
+              <label for="passwordHash" class="form-label">Password *</label>
+              <input type="password" class="form-control" id="passwordHash"
+                     name="passwordHash" required
+                     placeholder="Create a strong password"
+                     th:field="*{passwordHash}">
+              <div class="form-text">Use at least 8 characters with mix of letters and numbers</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="firstName" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="firstName"
+                     name="firstName"
+                     placeholder="Your first name"
+                     th:field="*{firstName}">
+            </div>
+
+            <div class="mb-3">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="lastName"
+                     name="lastName"
+                     placeholder="Your last name"
+                     th:field="*{lastName}">
+            </div>
+
+            <!-- Поле для выбора роли -->
+            <div class="mb-3">
+              <label class="form-label">Role *</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="roleStudent"
+                         name="role" value="STUDENT" checked
+                         th:field="*{role}">
+                  <label class="form-check-label" for="roleStudent">Student</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="roleTeacher"
+                         name="role" value="TEACHER"
+                         th:field="*{role}">
+                  <label class="form-check-label" for="roleTeacher">Teacher</label>
+                </div>
+              </div>
+              <div class="form-text">
+                <strong>Student:</strong> Can enroll in courses and view learning materials<br>
+                <strong>Teacher:</strong> Can create and manage courses
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 mb-3">
+              Create Account
+            </button>
+          </form>
+
+          <div class="text-center">
+            <p class="mb-0">Already have an account?</p>
+            <a th:href="@{/auth/login}" class="btn btn-outline-primary btn-sm">Sign In</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div>
-    <label>Email:</label>
-    <label>
-      <input type="email" th:field="*{email}" required>
-    </label>
-  </div>
-  <div>
-    <label>First Name:</label>
-    <label>
-      <input type="text" th:field="*{firstName}" required>
-    </label>
-  </div>
-  <div>
-    <label>Last Name:</label>
-    <label>
-      <input type="text" th:field="*{lastName}" required>
-    </label>
-  </div>
-  <div>
-    <label>Password:</label>
-    <label>
-      <input type="password" th:field="*{passwordHash}" required>
-    </label>
-  </div>
-  <div>
-    <label>Role:</label>
-    <label>
-      <select th:field="*{role}">
-        <option value="STUDENT">Student</option>
-        <option value="TEACHER">Teacher</option>
-      </select>
-    </label>
-  </div>
-  <div>
-    <button type="submit">Register</button>
-    <a href="/auth/login">Cancel</a>
-  </div>
-</form>
+</div>
 </body>
 </html>

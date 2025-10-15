@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${course.title} + ' - Details'">Course Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/courses/">Course Manager</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" th:href="@{/courses/}">All Courses</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 th:text="${course.title}">Course Title</h1>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Description</h5>
+                    <p class="card-text" th:text="${course.description != null ? course.description : 'No description available'}">
+                        Course description
+                    </p>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Instructor</h5>
+                    <p class="card-text" th:text="${course.teacher != null ? course.teacher.username : 'Unknown'}">
+                        Teacher name
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Course Information</h5>
+
+                    <div class="mb-2">
+                        <strong>Category:</strong>
+                        <span th:text="${course.category != null ? course.category : 'Not specified'}">Category</span>
+                    </div>
+
+                    <div class="mb-2">
+                        <strong>Price:</strong>
+                        <span th:if="${course.price != null and course.price > 0}"
+                              th:text="'$' + ${course.price}">Price</span>
+                        <span th:if="${course.price == null or course.price == 0}">Free</span>
+                    </div>
+
+                    <div class="mb-2">
+                        <strong>Created:</strong>
+                        <span th:text="${#temporals.format(course.createdAt, 'dd MMM yyyy')}">Date</span>
+                    </div>
+
+                    <div class="mb-2">
+                        <strong>Students enrolled:</strong>
+                        <span th:text="${course.enrollments != null ? course.enrollments.size() : 0}">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <a th:href="@{/courses/}" class="btn btn-secondary w-100 mb-2">Back to Courses</a>
+                    <a th:if="${isStudent}"
+                       th:href="@{/myCourses/enroll(courseId=${course.id})}"
+                       class="btn btn-success w-100">Enroll</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

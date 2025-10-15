@@ -19,12 +19,6 @@ public class UserDetailsImpl implements UserDetails {
         this.user = user;
     }
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return Arrays.stream(user.getRole().split(", "))
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
-//    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Добавляем префикс ROLE_ к роли
