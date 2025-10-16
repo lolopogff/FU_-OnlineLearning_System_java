@@ -92,14 +92,19 @@
             </div>
         </div>
         <div>
-            <!-- Кнопка создания курса только для TEACHER и ADMIN -->
-            <a th:if="${isTeacher or isAdmin}" th:href="@{/courses/new}" class="btn btn-primary me-2">
+            <!-- Для ADMIN показываем кнопку статистики -->
+            <a th:if="${isAdmin}" th:href="@{/admin/statistics}" class="btn btn-info me-2">
+                <i class="fas fa-chart-bar"></i> Statistics
+            </a>
+
+            <!-- Для TEACHER (не ADMIN) показываем обычные кнопки -->
+            <a th:if="${isTeacher and not isAdmin}" th:href="@{/courses/new}" class="btn btn-primary me-2">
                 <i class="fas fa-plus"></i> New Course
             </a>
-            <!-- Кнопка "My Courses" только для TEACHER и ADMIN -->
-            <a th:if="${isTeacher or isAdmin}" th:href="@{/courses/myCourses}" class="btn btn-outline-primary me-2">
+            <a th:if="${isTeacher and not isAdmin}" th:href="@{/courses/myCourses}" class="btn btn-outline-primary me-2">
                 <i class="fas fa-list"></i> My Courses
             </a>
+
             <!-- Кнопка "My Enrollments" только для STUDENT -->
             <a th:if="${isStudent}" th:href="@{/myCourses/all}" class="btn btn-outline-info">
                 <i class="fas fa-tasks"></i> My Enrollments

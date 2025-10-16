@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Statistics - Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/courses/">
+            <i class="fas fa-graduation-cap"></i> Course Manager
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" th:href="@{/courses/}">All Courses</a>
+            <a class="nav-link" th:href="@{/logout}">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-chart-bar text-info"></i> Site Statistics</h1>
+        <a th:href="@{/courses/}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Back to Courses
+        </a>
+    </div>
+
+    <!-- Основная статистика -->
+    <div class="row mb-4">
+        <!-- Общая статистика -->
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 th:text="${totalUsers}">0</h4>
+                            <p class="mb-0">Total Users</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 th:text="${totalCourses}">0</h4>
+                            <p class="mb-0">Total Courses</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-book fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 th:text="${totalEnrollments}">0</h4>
+                            <p class="mb-0">Total Enrollments</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-user-graduate fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 th:text="${totalRevenue != null ? totalRevenue + 'rub' : '0rub'}">0rub</h4>
+                            <p class="mb-0">Total Revenue</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-money-bill-wave fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Статистика по ролям пользователей -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-user-friends text-primary"></i> User Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Students:</strong>
+                        <span class="badge bg-success ms-2" th:text="${studentCount}">0</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Teachers:</strong>
+                        <span class="badge bg-warning ms-2" th:text="${teacherCount}">0</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Admins:</strong>
+                        <span class="badge bg-danger ms-2" th:text="${adminCount}">0</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>New Users (Last 30 days):</strong>
+                        <span class="badge bg-info ms-2" th:text="${newUsersCount}">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Статистика по курсам -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-chart-line text-success"></i> Course Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Free Courses:</strong>
+                        <span class="badge bg-secondary ms-2" th:text="${freeCoursesCount}">0</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Paid Courses:</strong>
+                        <span class="badge bg-primary ms-2" th:text="${paidCoursesCount}">0</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Average Course Price:</strong>
+                        <span class="badge bg-info ms-2" th:text="${(averageCoursePrice != null ? averageCoursePrice + 'rub' : '0rub')}">0rub</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Most Popular Category:</strong>
+                        <span class="badge bg-success ms-2" th:text="${mostPopularCategory != null ? mostPopularCategory : 'N/A'}">N/A</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Таблицы с детальной информацией -->
+    <div class="row">
+        <!-- Последние курсы -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-clock text-warning"></i> Recently Added Courses
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Teacher</th>
+                                <th>Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="course : ${recentCourses}">
+                                <td th:text="${course.title}">Course Title</td>
+                                <td th:text="${course.teacher.username}">Teacher</td>
+                                <td th:text="${#temporals.format(course.createdAt, 'dd.MM.yyyy')}">Date</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(recentCourses)}">
+                                <td colspan="3" class="text-center text-muted">No recent courses</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Активные преподаватели -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-user-tie text-info"></i> Top Teachers
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                            <tr>
+                                <th>Teacher</th>
+                                <th>Courses</th>
+                                <th>Enrollments</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="teacher : ${topTeachers}">
+                                <td th:text="${teacher.username}">Username</td>
+                                <td th:text="${teacher.courseCount}">0</td>
+                                <td th:text="${teacher.enrollmentCount}">0</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(topTeachers)}">
+                                <td colspan="3" class="text-center text-muted">No teacher data</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Системная информация -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-cogs text-secondary"></i> System Information
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Server Time:</strong>
+                    <span th:text="${#temporals.format(currentTime, 'dd.MM.yyyy HH:mm:ss')}">Time</span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Total Categories:</strong>
+                    <span th:text="${totalCategories}">0</span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Data Updated:</strong>
+                    <span th:text="${#temporals.format(currentTime, 'HH:mm:ss')}">Now</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
