@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.TeacherStats;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -51,4 +54,27 @@ public class UserService {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_" + role));
     }
 
+    public Long getTotalUsersCount(){
+        return userRepository.count();
+    }
+
+    public long getUsersCountByRole(String role) {
+        return userRepository.countByRole(role);
+    }
+
+    public long getNewUsersCount(int days) {
+        LocalDateTime since = LocalDateTime.now().minusDays(days);
+        return userRepository.countByCreatedAtAfter(since);
+    }
+
+    public List<TeacherStats> getTopTeachers(int limit) {
+        List<Object[]> results = userRepository.findTopTeachersWithStats(limit);
+        return results.stream().map(result -> {
+            TeacherStats stats = new TeacherStats();
+            stats.setUsername((String) result[0]);
+            stats.setCourseCount((Long) result[1]);
+            stats.setEnrollmentCount((Long) result[2]);
+            return stats;
+        }).collect(Collectors.toList());
+    }
 }

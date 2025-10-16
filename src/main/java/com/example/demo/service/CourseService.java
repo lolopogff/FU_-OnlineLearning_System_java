@@ -5,12 +5,14 @@ import com.example.demo.entity.User;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -135,4 +137,37 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
+    public Long getTotalCoursesCount(){
+        return courseRepository.count();
+    }
+
+    public BigDecimal getTotalRevenue() {
+        BigDecimal revenue = courseRepository.getTotalRevenue();
+        return revenue != null ? revenue : BigDecimal.ZERO;
+    }
+
+    public long getFreeCoursesCount() {
+        return courseRepository.countByPrice(BigDecimal.ZERO);
+    }
+
+    public long getPaidCoursesCount() {
+        return courseRepository.countByPriceGreaterThan(BigDecimal.ZERO);
+    }
+
+    public BigDecimal getAverageCoursePrice() {
+        BigDecimal avgPrice = courseRepository.getAverageCoursePrice();
+        return avgPrice != null ? avgPrice.setScale(2, RoundingMode.HALF_UP) : BigDecimal.ZERO;
+    }
+
+    public String getMostPopularCategory() {
+        return courseRepository.findMostPopularCategory();
+    }
+
+    public List<Course> getRecentCourses(int limit) {
+        return courseRepository.findTopByOrderByCreatedAtDesc(PageRequest.of(0, limit));
+    }
+
+    public long getTotalCategoriesCount() {
+        return courseRepository.countDistinctCategories();
+    }
 }

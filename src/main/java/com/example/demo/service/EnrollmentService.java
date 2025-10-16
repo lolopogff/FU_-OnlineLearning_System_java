@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,5 +79,17 @@ public class EnrollmentService {
         }
         enrollmentRepository.delete(enrollment);
     }
+
+    public long getTotalEnrollmentsCount() {
+        return enrollmentRepository.count();
+    }
+
+    public long getRecentEnrollmentsCount(int days) {
+        LocalDateTime since = LocalDateTime.now().minusDays(days);
+        return enrollmentRepository.countByEnrolledAtAfter(since);
+    }
+
+
+
 }
 
