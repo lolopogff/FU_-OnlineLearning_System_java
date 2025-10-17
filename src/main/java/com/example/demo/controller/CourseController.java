@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.CourseDTO;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.User;
 import com.example.demo.service.CourseService;
@@ -9,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -104,12 +106,34 @@ public class CourseController {
         return "redirect:/courses/";
     }
 
+//    @PostMapping("/save")
+//    @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
+//    public String saveCourse(@ModelAttribute CourseDTO courseDTO, BindingResult result, Authentication auth) {
+//        if (result.hasErrors()) {
+//            return "course/edit";
+//        }
+//        Course course = courseService.getCourseById(courseDTO.getId());
+//        if (course == null) {
+//            return "redirect:/courses/";
+//        }
+//        course.setTitle(courseDTO.getTitle());
+//        course.setDescription(courseDTO.getDescription());
+//        course.setCategory(courseDTO.getCategory());
+//        course.setPrice(courseDTO.getPrice());
+//        courseService.save(course, auth);
+//        return "redirect:/courses/";
+//    }
+
     @RequestMapping("/edit/{id}")
     @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
     public ModelAndView editCourse(@PathVariable Long id, Model model) {
         ModelAndView mav = new ModelAndView("course/edit");
         Course course = courseService.getCourseById(id);
-        mav.addObject("course", course);
+        if (course == null) {
+            mav.setViewName("redirect:/courses/");
+            return mav;
+        }
+        mav.addObject("course", new CourseDTO(course));
         return mav;
     }
 

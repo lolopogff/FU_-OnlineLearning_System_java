@@ -1,83 +1,246 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${course.title} + ' - Details'">Course Details</title>
+    <title th:text="${course.title} + ' - Details'">Детали курса</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/course-details.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/courses/">Course Manager</a>
-        <div class="navbar-nav ms-auto">
-            <a class="nav-link" th:href="@{/courses/}">All Courses</a>
+<div class="dark-container dark-course-details-container">
+    <!-- Анимированный фон -->
+    <div class="animated-background">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
         </div>
     </div>
-</nav>
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-8">
-            <h1 th:text="${course.title}">Course Title</h1>
-
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Description</h5>
-                    <p class="card-text" th:text="${course.description != null ? course.description : 'No description available'}">
-                        Course description
-                    </p>
+    <!-- Навигация -->
+    <nav class="dark-navbar">
+        <div class="dark-navbar-container">
+            <a class="dark-navbar-brand" href="/courses/">
+                <div class="logo-icon">
+                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                        <path d="M16 0C7.163 0 0 7.163 0 16C0 24.837 7.163 32 16 32C24.837 32 32 24.837 32 16C32 7.163 24.837 0 16 0Z" fill="url(#gradient)"/>
+                        <path d="M21 13C21 15.761 18.761 18 16 18C13.239 18 11 15.761 11 13C11 10.239 13.239 8 16 8C18.761 8 21 10.239 21 13Z" fill="white"/>
+                        <path d="M23 23C23 21.343 20.314 20 17 20H15C11.686 20 9 21.343 9 23V24H23V23Z" fill="white"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#8B5CF6"/>
+                                <stop offset="100%" stop-color="#3B82F6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
                 </div>
-            </div>
+                <span class="dark-logo-text">CourseFlow</span>
+            </a>
 
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Instructor</h5>
-                    <p class="card-text" th:text="${course.teacher != null ? course.teacher.username : 'Unknown'}">
-                        Teacher name
-                    </p>
+            <div class="dark-nav-links">
+                <a class="dark-nav-link" th:href="@{/courses/}">
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Назад к курсам
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <main class="dark-main-content">
+        <div class="dark-content-container">
+            <div class="dark-course-details-grid">
+                <!-- Основная информация о курсе -->
+                <div class="dark-course-main">
+                    <!-- Заголовок и мета-информация -->
+                    <div class="dark-course-header">
+                        <div class="dark-course-badge" th:if="${course.category != null and course.category != ''}">
+                            <span th:text="${course.category}">Категория</span>
+                        </div>
+                        <h1 class="dark-course-title" th:text="${course.title}">Заголовок</h1>
+                        <div class="dark-course-meta">
+                            <div class="dark-meta-item">
+                                <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                                <span th:text="${course.teacher != null ? course.teacher.username : 'Unknown'}">Преподаватель</span>
+                            </div>
+                            <div class="dark-meta-item">
+                                <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                                <span th:text="${#temporals.format(course.createdAt, 'dd MMM yyyy')}">Дата</span>
+                            </div>
+                            <div class="dark-meta-item">
+                                <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                                <span th:text="${course.enrollments != null ? course.enrollments.size() : 0}">0</span>
+                                students enrolled
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Описание курса -->
+                    <div class="dark-card dark-course-description-card">
+                        <div class="dark-card-header">
+                            <h3 class="dark-card-title">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
+                                Описание курса
+                            </h3>
+                        </div>
+                        <div class="dark-card-body">
+                            <p class="dark-course-description" th:if="${course.description != null and course.description != ''}" th:text="${course.description}">
+                                Описание курса
+                            </p>
+                            <p class="dark-course-description empty" th:if="${course.description == null or course.description == ''}">
+                                Нет описания для этого курса.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Информация о преподавателе -->
+                    <div class="dark-card dark-instructor-card">
+                        <div class="dark-card-header">
+                            <h3 class="dark-card-title">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                                О преподавателе
+                            </h3>
+                        </div>
+                        <div class="dark-card-body">
+                            <div class="dark-instructor-info">
+                                <div class="dark-instructor-avatar">
+                                    <svg width="40" height="40" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="dark-instructor-details">
+                                    <h4 class="dark-instructor-name" th:text="${course.teacher != null ? course.teacher.username : 'Unknown Instructor'}">
+                                        Имя преподавателя
+                                    </h4>
+                                    <p class="dark-instructor-bio">
+                                        Опытный преподаватель, увлеченный обменом знаниями и помогающий студентам достичь своих целей в обучении.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Боковая панель -->
+                <div class="dark-course-sidebar">
+                    <!-- Карточка информации о курсе -->
+                    <div class="dark-card dark-course-info-card">
+                        <div class="dark-card-header">
+                            <h3 class="dark-card-title">Детали курса</h3>
+                        </div>
+                        <div class="dark-card-body">
+                            <div class="dark-info-list">
+                                <div class="dark-info-item">
+                                    <div class="dark-info-label">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                                        </svg>
+                                        Категория
+                                    </div>
+                                    <div class="dark-info-value" th:text="${course.category != null ? course.category : 'Not specified'}">
+                                        Категория
+                                    </div>
+                                </div>
+
+                                <div class="dark-info-item">
+                                    <div class="dark-info-label">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
+                                            <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd" />
+                                        </svg>
+                                        Цена
+                                    </div>
+                                    <div class="dark-info-value">
+                                        <span th:if="${course.price != null and course.price > 0}" class="dark-course-price">
+                                            <span th:text="${#numbers.formatDecimal(course.price, 1, 2)}">0.00</span>₽
+                                        </span>
+                                        <span th:if="${course.price == null or course.price == 0}" class="dark-course-price free">
+                                            Бесплатно
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="dark-info-item">
+                                    <div class="dark-info-label">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                        </svg>
+                                        Создан
+                                    </div>
+                                    <div class="dark-info-value" th:text="${#temporals.format(course.createdAt, 'dd MMM yyyy')}">
+                                        Дата
+                                    </div>
+                                </div>
+
+                                <div class="dark-info-item">
+                                    <div class="dark-info-label">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                        </svg>
+                                        Записанных студентов
+                                    </div>
+                                    <div class="dark-info-value" th:text="${course.enrollments != null ? course.enrollments.size() : 0}">
+                                        0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Действия с курсом -->
+                    <div class="dark-card dark-course-actions-card">
+                        <div class="dark-card-body">
+                            <a th:href="@{/courses/}" class="dark-button dark-button-secondary dark-action-btn">
+                                <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                                </svg>
+                                Назад к курсам
+                            </a>
+
+                            <a th:if="${isStudent}"
+                               th:href="@{/myCourses/enroll(courseId=${course.id})}"
+                               class="dark-button dark-button-success dark-action-btn enroll-btn">
+                                <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 9.586V7z" clip-rule="evenodd" />
+                                </svg>
+                                Записаться на курс
+                            </a>
+
+                            <!-- Кнопки для преподавателя/админа -->
+                            <div th:if="${isAdmin or (isTeacher and course.teacher != null and course.teacher.username == user.username)}" class="dark-admin-actions">
+                                <a th:href="@{/courses/edit/{id}(id=${course.id})}"
+                                   class="dark-button dark-button-warning dark-action-btn">
+                                    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+                                    </svg>
+                                    Редактировать курс
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Course Information</h5>
-
-                    <div class="mb-2">
-                        <strong>Category:</strong>
-                        <span th:text="${course.category != null ? course.category : 'Not specified'}">Category</span>
-                    </div>
-
-                    <div class="mb-2">
-                        <strong>Price:</strong>
-                        <span th:if="${course.price != null and course.price > 0}"
-                              th:text="'$' + ${course.price}">Price</span>
-                        <span th:if="${course.price == null or course.price == 0}">Free</span>
-                    </div>
-
-                    <div class="mb-2">
-                        <strong>Created:</strong>
-                        <span th:text="${#temporals.format(course.createdAt, 'dd MMM yyyy')}">Date</span>
-                    </div>
-
-                    <div class="mb-2">
-                        <strong>Students enrolled:</strong>
-                        <span th:text="${course.enrollments != null ? course.enrollments.size() : 0}">0</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card mt-3">
-                <div class="card-body">
-                    <a th:href="@{/courses/}" class="btn btn-secondary w-100 mb-2">Back to Courses</a>
-                    <a th:if="${isStudent}"
-                       th:href="@{/myCourses/enroll(courseId=${course.id})}"
-                       class="btn btn-success w-100">Enroll</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    </main>
 </div>
+
+<!-- JavaScript -->
+<script th:src="@{/js/main.js}" defer></script>
+<script th:src="@{/js/course-details.js}" defer></script>
 </body>
 </html>
