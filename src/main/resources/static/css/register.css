@@ -1,0 +1,204 @@
+/* Register Specific Styles */
+.dark-register-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.dark-register-card {
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 520px;
+}
+
+.dark-register-header {
+    margin-bottom: 32px;
+}
+
+.dark-register-form {
+    margin-bottom: 40px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.dark-form-text {
+    font-size: 13px;
+    color: var(--dark-500);
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+/* Role Selection */
+.role-selection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.role-option {
+    position: relative;
+}
+
+.role-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.role-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.role-option input[type="radio"]:checked + .role-card {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.role-option input[type="radio"]:hover + .role-card {
+    border-color: var(--dark-500);
+}
+
+.role-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(139, 92, 246, 0.1);
+    border-radius: 12px;
+    color: var(--primary-light);
+    flex-shrink: 0;
+}
+
+.role-option input[type="radio"]:checked + .role-card .role-icon {
+    background: var(--primary);
+    color: white;
+}
+
+.role-content {
+    flex: 1;
+}
+
+.role-title {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.role-description {
+    font-size: 13px;
+    color: var(--dark-500);
+    line-height: 1.3;
+}
+
+/* Register Button */
+.dark-register-button {
+    width: 100%;
+    padding: 18px 32px;
+    background: linear-gradient(135deg, var(--success), #059669);
+}
+
+.dark-register-button:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+}
+
+/* Footer */
+.dark-register-footer {
+    text-align: center;
+    padding-top: 32px;
+    border-top: 1px solid var(--glass-border);
+}
+
+.dark-footer-text {
+    font-size: 15px;
+    color: var(--dark-600);
+    margin-bottom: 20px;
+}
+
+.dark-auth-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-light);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    transition: all 0.3s ease;
+}
+
+.dark-auth-link:hover {
+    background: rgba(139, 92, 246, 0.1);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .role-selection {
+        grid-template-columns: 1fr;
+    }
+
+    .dark-register-card {
+        padding: 40px 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dark-register-container {
+        padding: 0;
+    }
+
+    .dark-register-card {
+        padding: 40px 24px;
+        border-radius: 0;
+        margin: 0;
+        min-height: 100vh;
+        backdrop-filter: blur(40px);
+    }
+
+    .role-card {
+        padding: 16px;
+    }
+
+    .role-icon {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* Animation delays for form elements */
+.dark-form-group:nth-child(1) { animation-delay: 0.1s; }
+.dark-form-group:nth-child(2) { animation-delay: 0.15s; }
+.dark-form-group:nth-child(3) { animation-delay: 0.2s; }
+.dark-form-group:nth-child(4) { animation-delay: 0.25s; }
+.dark-form-group:nth-child(5) { animation-delay: 0.3s; }
+.dark-register-button { animation-delay: 0.35s; }
+.dark-register-footer { animation-delay: 0.4s; }

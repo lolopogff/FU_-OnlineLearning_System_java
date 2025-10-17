@@ -35,8 +35,8 @@ public class CourseService {
         return courseRepository.getCourseById(id);
     }
 
-    public void save(Course course, Authentication authentication) {
-        User user = userRepository.findByUsername(authentication.getName())
+    public void save(Course course, Authentication auth) {
+        User user = userRepository.findByUsername(auth.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
         course.setTeacher(user);
         courseRepository.save(course);
