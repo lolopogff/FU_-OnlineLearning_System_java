@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,10 +127,14 @@ public class CourseController {
 
     @RequestMapping("/edit/{id}")
     @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
-    public ModelAndView editCourse(@PathVariable Long id, Model model) {
+    public ModelAndView editCourse(@PathVariable Long id, Principal principal) {
         ModelAndView mav = new ModelAndView("course/edit");
         Course course = courseService.getCourseById(id);
         if (course == null) {
+            mav.setViewName("redirect:/courses/");
+            return mav;
+        }
+        if (!principal.getName().equals(course.getTeacher().getUsername())) {
             mav.setViewName("redirect:/courses/");
             return mav;
         }
@@ -151,6 +156,7 @@ public class CourseController {
             model.addAttribute("my_courses", myCourses);
             model.addAttribute("isTeacher", userService.hasRole(authentication, "TEACHER"));
             model.addAttribute("isAdmin", userService.hasRole(authentication, "ADMIN"));
+            model.addAttribute("user", authentication);
             return "course/myCourses";
         } catch (Exception e) {
             // Логируем ошибку для диагностики
@@ -163,11 +169,22 @@ public class CourseController {
 
     @GetMapping("/details/{id}")
     public String courseDetails(@PathVariable Long id, Model model, Authentication authentication) {
+        // Добавляем информацию о текущем пользователе
+        String currentUsername = null;
+        if (authentication != null && authentication.getPrincipal() instanceof User user) {
+            model.addAttribute("currentUser", user);
+            currentUsername = user.getUsername();
+        }
+
+        // Добавляем имя текущего пользователя в модель
+        model.addAttribute("currentUsername", currentUsername);
+
         try {
             Course course = courseService.getCourseById(id);
             if (course == null) {
                 return "redirect:/courses/";
             }
+
             model.addAttribute("course", course);
             model.addAttribute("isTeacher", userService.hasRole(authentication, "TEACHER"));
             model.addAttribute("isStudent", userService.hasRole(authentication, "STUDENT"));

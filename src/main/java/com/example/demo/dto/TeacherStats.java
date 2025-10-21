@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 // TeacherStats.java
+
 public class TeacherStats {
     private String username;
     private Long courseCount;

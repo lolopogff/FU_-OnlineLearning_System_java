@@ -4,6 +4,7 @@ import com.example.demo.entity.Course;
 import com.example.demo.entity.User;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -32,9 +33,9 @@ public class CourseService {
     }
 
     public Course getCourseById(Long id) {
-        return courseRepository.getCourseById(id);
+        return courseRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Course not found with id: " + id));
     }
-
     public void save(Course course, Authentication auth) {
         User user = userRepository.findByUsername(auth.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
