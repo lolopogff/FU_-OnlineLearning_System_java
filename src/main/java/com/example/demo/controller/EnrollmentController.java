@@ -28,6 +28,7 @@ public class EnrollmentController {
         model.addAttribute("enrollments", enrollmentService.getAllUserEnrollments(authentication));
         model.addAttribute("isStudent", userService.hasRole(authentication, "STUDENT"));
         model.addAttribute("isTeacher", userService.hasRole(authentication, "TEACHER"));
+        model.addAttribute("user", authentication);
         return "enrollments/myEnrollments";
     }
 

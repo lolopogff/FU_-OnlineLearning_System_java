@@ -1,0 +1,106 @@
+.dark-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.dark-form-label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #d1d5db;
+    margin-bottom: 0.5rem;
+}
+
+.dark-form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    color: #f9fafb;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dark-form-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    border: 1px solid #3b82f6;
+}
+
+.dark-form-input::placeholder {
+    color: #9ca3af;
+}
+
+.dark-form-text {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    margin-top: 0.25rem;
+}
+
+textarea.dark-form-input {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.dark-course-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+.dark-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.dark-button-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #d1d5db;
+}
+
+.dark-button-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #f9fafb;
+}
+
+.dark-button-success {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+}
+
+.dark-button-success:hover {
+    background: rgba(34, 197, 94, 0.2);
+    color: #16a34a;
+}
+
+/* Стили для ошибок валидации */
+.dark-form-input.error {
+    border: 1px solid #ef4444;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.dark-form-error {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dark-form-error-icon {
+    width: 16px;
+    height: 16px;
+}

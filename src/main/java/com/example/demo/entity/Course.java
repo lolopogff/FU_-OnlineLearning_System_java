@@ -4,6 +4,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,6 +24,8 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Название курса не может быть пустым")
+    @Size(min = 3, max = 255, message = "Название курса должно содержать от 3 до 255 символов")
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -30,7 +36,9 @@ public class Course {
     @JoinColumn(name = "teacher_id", nullable = false)
     private User teacher;
 
-    @Column(name = "price", precision = 10, scale = 2)
+    @DecimalMin(value = "0.00", message = "Цена не может быть отрицательной")
+    @Digits(integer = 10, fraction = 2, message = "Цена должна быть в формате: до 10 цифр до запятой и 2 после")
+    @Column(name = "price", precision = 10000000, scale = 2)
     private BigDecimal price = BigDecimal.ZERO;
 
     @Column(name = "category", length = 100)

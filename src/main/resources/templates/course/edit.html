@@ -6,99 +6,11 @@
     <title>Edit Course - EduFlow</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/base.css}">
-    <link rel="stylesheet" th:href="@{/css/courses.css}">
+    <link rel="stylesheet" th:href="@{/css/course/courses.css}">
+    <link rel="stylesheet" th:href="@{/css/course/course-edit.css}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script th:src="@{/js/main.js}" defer></script>
-    <style>
-        .dark-form-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .dark-form-group {
-            margin-bottom: 1.5rem;
-        }
-        .dark-form-label {
-            display: block;
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--dark-600);
-            margin-bottom: 0.5rem;
-        }
-        .dark-form-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1.5px solid var(--dark-300);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        .dark-form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-        }
-        .dark-form-input::placeholder {
-            color: var(--dark-500);
-        }
-        textarea.dark-form-input {
-            resize: vertical;
-            min-height: 120px;
-        }
-        .dark-select {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1.5px solid var(--dark-300);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        .dark-select:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-        }
-        .dark-course-info {
-            background: var(--glass);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--glass-border);
-        }
-        .dark-course-info .info-title {
-            color: white;
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .dark-course-info .info-text {
-            color: var(--dark-600);
-            font-size: 0.875rem;
-        }
-        .dark-course-info strong {
-            color: white;
-        }
-        .dark-form-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--glass-border);
-        }
-        .required-field::after {
-            content: " *";
-            color: #EF4444;
-        }
-    </style>
+    <script th:src="@{/js/newCourse.js}" defer></script>
 </head>
 <body>
 <div class="dark-container dark-courses-container">
@@ -114,19 +26,6 @@
     <nav class="dark-navbar">
         <div class="dark-navbar-container">
             <a class="dark-navbar-brand" th:href="@{/courses/}">
-                <div class="logo-icon">
-                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-                        <path d="M16 0C7.163 0 0 7.163 0 16C0 24.837 7.163 32 16 32C24.837 32 32 24.837 32 16C32 7.163 24.837 0 16 0Z" fill="url(#gradient)"/>
-                        <path d="M21 13C21 15.761 18.761 18 16 18C13.239 18 11 15.761 11 13C11 10.239 13.239 8 16 8C18.761 8 21 10.239 21 13Z" fill="white"/>
-                        <path d="M23 23C23 21.343 20.314 20 17 20H15C11.686 20 9 21.343 9 23V24H23V23Z" fill="white"/>
-                        <defs>
-                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#8B5CF6"/>
-                                <stop offset="100%" stop-color="#3B82F6"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
                 <span class="dark-logo-text">CourseFlow</span>
             </a>
 
@@ -141,7 +40,8 @@
                 </div>
                 <a class="dark-button dark-button-secondary dark-profile-btn" th:href="@{/user/profile}">
                     <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                              clip-rule="evenodd"/>
                     </svg>
                     Профиль
                 </a>
@@ -163,7 +63,9 @@
                 <div class="dark-header-actions">
                     <a th:href="@{/courses/}" class="dark-button dark-button-secondary">
                         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd"
+                                  d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                                  clip-rule="evenodd"/>
                         </svg>
                         Назад к курсам
                     </a>
@@ -176,7 +78,9 @@
                         <div class="dark-course-info">
                             <div class="info-title">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                    <path fill-rule="evenodd"
+                                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                          clip-rule="evenodd"/>
                                 </svg>
                                 Информация о курсе
                             </div>
@@ -199,43 +103,104 @@
                         </div>
 
                         <form method="post" th:action="@{/courses/save}" th:object="${course}">
-                            <input type="hidden" th:field="*{id}" />
-                            <input type="hidden" th:field="*{createdAt}" />
-                            <input type="hidden" th:field="*{updatedAt}" />
+                            <input type="hidden" th:field="*{id}"/>
+                            <input type="hidden" th:field="*{createdAt}"/>
+                            <input type="hidden" th:field="*{updatedAt}"/>
+                            <!--                            <div class="dark-form-group">-->
+                            <!--                                <label for="title" class="dark-form-label required-field">Название курса</label>-->
+                            <!--                                <input type="text" class="dark-form-input" id="title" th:field="*{title}"-->
+                            <!--                                       placeholder="Введите название курса" required aria-label="Course Title">-->
+                            <!--                                <div class="dark-form-text">Дайте своему курсу четкое и наглядное название</div>-->
+                            <!--                            </div>-->
+
+                            <!-- Название курса -->
                             <div class="dark-form-group">
-                                <label for="title" class="dark-form-label required-field">Название курса</label>
-                                <input type="text" class="dark-form-input" id="title" th:field="*{title}" placeholder="Введите название курса" required aria-label="Course Title">
-                                <div class="dark-form-text">Дайте своему курсу четкое и наглядное название</div>
+                                <label for="title" class="dark-form-label">Название курса *</label>
+                                <input type="text"
+                                       class="dark-form-input"
+                                       id="title"
+                                       th:field="*{title}"
+                                       th:classappend="${#fields.hasErrors('title')} ? 'error' : ''"
+                                       required
+                                       minlength="3"
+                                       maxlength="255"
+                                       placeholder="Введите название курса (например, 'Введение в программирование на Java')"
+                                       aria-label="Название курса">
+                                <div th:if="${#fields.hasErrors('title')}" class="dark-form-error">
+                                    <svg class="dark-form-error-icon" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span th:errors="*{title}">Error</span>
+                                </div>
+                                <div class="dark-form-text">Сделайте его наглядным и привлекательным для студентов</div>
                             </div>
+
                             <div class="dark-form-group">
                                 <label for="description" class="dark-form-label">Описание курса</label>
-                                <textarea class="dark-form-input" id="description" th:field="*{description}" placeholder="Опишите, чему студенты будут обучаться на этом курсе..." rows="5" aria-label="Course Description"></textarea>
+                                <textarea class="dark-form-input" id="description" th:field="*{description}"
+                                          placeholder="Опишите, чему студенты будут обучаться на этом курсе..." rows="5"
+                                          aria-label="Course Description"></textarea>
                                 <div class="dark-form-text">Предоставьте подробное описание содержания курса</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="dark-form-group">
                                         <label for="category" class="dark-form-label">Category</label>
-                                        <input type="text" class="dark-form-input" id="category" th:field="*{category}" placeholder="например, Программирование, Дизайн, Бизнес" aria-label="Category">
-                                        <div class="dark-form-text">Выберите категорию, которая наилучшим образом соответствует вашему курсу</div>
+                                        <input type="text" class="dark-form-input" id="category" th:field="*{category}"
+                                               placeholder="например, Программирование, Дизайн, Бизнес"
+                                               aria-label="Category">
+                                        <div class="dark-form-text">Выберите категорию, которая наилучшим образом
+                                            соответствует вашему курсу
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="dark-form-group">
-                                <label for="price" class="dark-form-label">Цена (RUB)</label>
-                                <input type="number" class="dark-form-input" id="price" th:field="*{price}" placeholder="0.00" step="0.01" min="0" aria-label="Цена курса">
-                                <div class="dark-form-text">Укажите цену в российских рублях. Оставьте 0 для получения бесплатного курса.</div>
+                            <!--                            <div class="dark-form-group">-->
+                            <!--                                <label for="price" class="dark-form-label">Цена (RUB)</label>-->
+                            <!--                                <input type="number" class="dark-form-input" id="price" th:field="*{price}" placeholder="0.00" step="0.01" min="0" aria-label="Цена курса">-->
+                            <!--                                <div class="dark-form-text">Укажите цену в российских рублях. Оставьте 0 для получения бесплатного курса.</div>-->
+                            <!--                            </div>-->
+
+                            <!-- Цена с валидацией -->
+                            <div class="col-md-6 dark-form-group">
+                                <label for="price" class="dark-form-label">Цена (₽)</label>
+                                <input type="number"
+                                       class="dark-form-input"
+                                       id="price"
+                                       th:field="*{price}"
+                                       th:classappend="${#fields.hasErrors('price')} ? 'error' : ''"
+                                       step="0.01"
+                                       min="0"
+                                       max="99999999.99"
+                                       placeholder="0.00"
+                                       aria-label="Price"
+                                       oninput="validatePrice(this)">
+                                <div th:if="${#fields.hasErrors('price')}" class="dark-form-error">
+                                    <svg class="dark-form-error-icon" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                              clip-rule="evenodd"/>
+                                    </svg>
+                                    <span th:errors="*{price}">Error</span>
+                                </div>
+                                <div class="dark-form-text">Установите значение 0 для бесплатных курсов. Формат: до 10
+                                    цифр до запятой и 2 после
+                                </div>
                             </div>
                             <div class="dark-form-actions">
                                 <a th:href="@{/courses/}" class="dark-button dark-button-secondary">
                                     <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                                        <path fill-rule="evenodd"
+                                              d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                                              clip-rule="evenodd"/>
                                     </svg>
                                     Закрыть
                                 </a>
                                 <button type="submit" class="dark-button">
                                     <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        <path fill-rule="evenodd"
+                                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                              clip-rule="evenodd"/>
                                     </svg>
                                     Обновить курс
                                 </button>

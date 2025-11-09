@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${course.title} + ' - Details'">Детали курса</title>
+    <title th:text="${course != null ? (course.title + ' - Details') : 'Детали курса'}">Детали курса</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/base.css}">
-    <link rel="stylesheet" th:href="@{/css/course-details.css}">
+    <link rel="stylesheet" th:href="@{/css/course/course-details.css}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -24,19 +24,6 @@
     <nav class="dark-navbar">
         <div class="dark-navbar-container">
             <a class="dark-navbar-brand" href="/courses/">
-                <div class="logo-icon">
-                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-                        <path d="M16 0C7.163 0 0 7.163 0 16C0 24.837 7.163 32 16 32C24.837 32 32 24.837 32 16C32 7.163 24.837 0 16 0Z" fill="url(#gradient)"/>
-                        <path d="M21 13C21 15.761 18.761 18 16 18C13.239 18 11 15.761 11 13C11 10.239 13.239 8 16 8C18.761 8 21 10.239 21 13Z" fill="white"/>
-                        <path d="M23 23C23 21.343 20.314 20 17 20H15C11.686 20 9 21.343 9 23V24H23V23Z" fill="white"/>
-                        <defs>
-                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#8B5CF6"/>
-                                <stop offset="100%" stop-color="#3B82F6"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
                 <span class="dark-logo-text">CourseFlow</span>
             </a>
 
@@ -54,7 +41,20 @@
     <!-- Основной контент -->
     <main class="dark-main-content">
         <div class="dark-content-container">
-            <div class="dark-course-details-grid">
+            <!-- Проверка существования курса -->
+            <div th:if="${course == null}" class="dark-error-message">
+                <div class="dark-card">
+                    <div class="dark-card-body text-center">
+                        <h3>Курс не найден</h3>
+                        <p>Запрошенный курс не существует или был удален.</p>
+                        <a th:href="@{/courses/}" class="dark-button dark-button-primary">
+                            Вернуться к списку курсов
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${course != null}" class="dark-course-details-grid">
                 <!-- Основная информация о курсе -->
                 <div class="dark-course-main">
                     <!-- Заголовок и мета-информация -->
@@ -62,26 +62,27 @@
                         <div class="dark-course-badge" th:if="${course.category != null and course.category != ''}">
                             <span th:text="${course.category}">Категория</span>
                         </div>
-                        <h1 class="dark-course-title" th:text="${course.title}">Заголовок</h1>
+                        <h1 class="dark-course-title" th:text="${course.title != null ? course.title : 'Без названия'}">Заголовок</h1>
                         <div class="dark-course-meta">
                             <div class="dark-meta-item">
                                 <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                                 </svg>
-                                <span th:text="${course.teacher != null ? course.teacher.username : 'Unknown'}">Преподаватель</span>
+                                <span th:text="${course.teacher != null and course.teacher.username != null ? course.teacher.username : 'Неизвестный преподаватель'}">Преподаватель</span>
                             </div>
                             <div class="dark-meta-item">
                                 <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
                                 </svg>
-                                <span th:text="${#temporals.format(course.createdAt, 'dd MMM yyyy')}">Дата</span>
+                                <span th:if="${course.createdAt != null}" th:text="${#temporals.format(course.createdAt, 'dd MMM yyyy')}">Дата</span>
+                                <span th:if="${course.createdAt == null}">Не указана</span>
                             </div>
                             <div class="dark-meta-item">
                                 <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                                 </svg>
                                 <span th:text="${course.enrollments != null ? course.enrollments.size() : 0}">0</span>
-                                students enrolled
+                                студентов записано
                             </div>
                         </div>
                     </div>
@@ -124,7 +125,7 @@
                                     </svg>
                                 </div>
                                 <div class="dark-instructor-details">
-                                    <h4 class="dark-instructor-name" th:text="${course.teacher != null ? course.teacher.username : 'Unknown Instructor'}">
+                                    <h4 class="dark-instructor-name" th:text="${course.teacher != null and course.teacher.username != null ? course.teacher.username : 'Неизвестный преподаватель'}">
                                         Имя преподавателя
                                     </h4>
                                     <p class="dark-instructor-bio">
@@ -152,7 +153,7 @@
                                         </svg>
                                         Категория
                                     </div>
-                                    <div class="dark-info-value" th:text="${course.category != null ? course.category : 'Not specified'}">
+                                    <div class="dark-info-value" th:text="${course.category != null and course.category != '' ? course.category : 'Не указана'}">
                                         Категория
                                     </div>
                                 </div>
@@ -182,8 +183,9 @@
                                         </svg>
                                         Создан
                                     </div>
-                                    <div class="dark-info-value" th:text="${#temporals.format(course.createdAt, 'dd MMM yyyy')}">
-                                        Дата
+                                    <div class="dark-info-value">
+                                        <span th:if="${course.createdAt != null}" th:text="${#temporals.format(course.createdAt, 'dd MMM yyyy')}">Дата</span>
+                                        <span th:if="${course.createdAt == null}">Не указана</span>
                                     </div>
                                 </div>
 
@@ -222,7 +224,7 @@
                             </a>
 
                             <!-- Кнопки для преподавателя/админа -->
-                            <div th:if="${isAdmin or (isTeacher and course.teacher != null and course.teacher.username == user.username)}" class="dark-admin-actions">
+                            <div th:if="${isAdmin or (isTeacher and course.teacher != null and course.teacher.username == currentUsername)}" class="dark-admin-actions">
                                 <a th:href="@{/courses/edit/{id}(id=${course.id})}"
                                    class="dark-button dark-button-warning dark-action-btn">
                                     <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
