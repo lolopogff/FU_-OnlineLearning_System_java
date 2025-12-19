@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.EnrollmentService;
 import com.example.demo.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -16,15 +17,11 @@ import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/admin")
+@AllArgsConstructor
 public class AdminController {
 
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private CourseService courseService;
-
-    @Autowired
     private EnrollmentService enrollmentService;
 
     @PreAuthorize("hasRole('ADMIN')")

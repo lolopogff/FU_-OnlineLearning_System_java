@@ -5,12 +5,11 @@ import com.example.demo.entity.Course;
 import com.example.demo.entity.User;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,12 +20,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/courses")
+@AllArgsConstructor
 public class CourseController {
 
-    @Autowired
     CourseService courseService;
-
-    @Autowired
     UserService userService;
 
     @RequestMapping("/")
@@ -107,24 +104,6 @@ public class CourseController {
         return "redirect:/courses/";
     }
 
-//    @PostMapping("/save")
-//    @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
-//    public String saveCourse(@ModelAttribute CourseDTO courseDTO, BindingResult result, Authentication auth) {
-//        if (result.hasErrors()) {
-//            return "course/edit";
-//        }
-//        Course course = courseService.getCourseById(courseDTO.getId());
-//        if (course == null) {
-//            return "redirect:/courses/";
-//        }
-//        course.setTitle(courseDTO.getTitle());
-//        course.setDescription(courseDTO.getDescription());
-//        course.setCategory(courseDTO.getCategory());
-//        course.setPrice(courseDTO.getPrice());
-//        courseService.save(course, auth);
-//        return "redirect:/courses/";
-//    }
-
     @RequestMapping("/edit/{id}")
     @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
     public ModelAndView editCourse(@PathVariable Long id, Principal principal) {
@@ -195,5 +174,15 @@ public class CourseController {
         }
     }
 
-
+    @GetMapping("/about/author")
+    public String aboutAuthor(Model model, Authentication authentication) {
+        // Добавляем роли для согласованности с другими страницами
+        if (authentication != null) {
+            model.addAttribute("isTeacher", userService.hasRole(authentication, "TEACHER"));
+            model.addAttribute("isStudent", userService.hasRole(authentication, "STUDENT"));
+            model.addAttribute("isAdmin", userService.hasRole(authentication, "ADMIN"));
+            model.addAttribute("user", authentication.getPrincipal());
+        }
+        return "about/author";
+    }
 }

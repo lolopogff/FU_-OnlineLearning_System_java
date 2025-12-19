@@ -75,6 +75,12 @@
 
             <!-- Профиль пользователя -->
             <div class="dark-user-menu">
+                <a th:href="@{/courses/about/author}" class="dark-nav-link me-4">
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                    Об авторе
+                </a>
                 <div class="dark-user-info">
                     <span class="dark-user-name" th:text="${user != null ? user.name : 'Гость'}">User</span>
                     <div class="dark-user-roles">

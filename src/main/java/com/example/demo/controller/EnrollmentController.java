@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Enrollment;
 import com.example.demo.service.EnrollmentService;
 import com.example.demo.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,12 +16,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/myCourses")
+@AllArgsConstructor
 public class EnrollmentController {
 
-    @Autowired
     private EnrollmentService enrollmentService;
-
-    @Autowired
     private UserService userService;
 
     @GetMapping("/all")

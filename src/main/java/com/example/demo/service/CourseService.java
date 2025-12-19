@@ -21,16 +21,15 @@ import java.util.stream.Collectors;
 @Service
 public class CourseService {
 
-    @Autowired
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+    public  CourseService(UserRepository userRepository, CourseRepository courseRepository) {
+        this.userRepository = userRepository;
+        this.courseRepository = courseRepository;
     }
+
 
     public Course getCourseById(Long id) {
         return courseRepository.findById(id)
@@ -76,9 +75,6 @@ public class CourseService {
         return new ArrayList<>();
     }
 
-    public List<Course> searchCoursesByTitle(String title) {
-        return courseRepository.findByTitleContainingIgnoreCase(title);
-    }
 
     public List<Course> findCoursesWithFilters(String search, String category, String teacher,
                                                BigDecimal minPrice, BigDecimal maxPrice) {
