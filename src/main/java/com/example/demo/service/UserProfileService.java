@@ -47,17 +47,6 @@ public class UserProfileService {
                 });
     }
 
-    public UserProfile getUserProfileByUsername(String username) {
-        return userProfileRepository.findByUserUsername(username)
-                .orElseGet(() -> {
-                    User user = userRepository.findByUsername(username)
-                            .orElseThrow(() -> new RuntimeException("User not found"));
-                    UserProfile profile = new UserProfile();
-                    profile.setUser(user);
-                    return userProfileRepository.save(profile);
-                });
-    }
-
     public void updateUserProfile(Long userId, String bio, String phone,
                                   String location, LocalDate dateOfBirth, String website) {
         UserProfile profile = getUserProfile(userId);
@@ -105,23 +94,6 @@ public class UserProfileService {
         }
     }
 
-    public void checkUploadDirectory() {
-        try {
-            System.out.println("=== Upload Directory Info ===");
-            System.out.println("Path: " + rootLocation.toAbsolutePath());
-            System.out.println("Exists: " + Files.exists(rootLocation));
-            System.out.println("Writable: " + Files.isWritable(rootLocation));
-
-            if (Files.exists(rootLocation)) {
-                Files.list(rootLocation).forEach(path -> {
-                    System.out.println("File: " + path.getFileName());
-                });
-            }
-            System.out.println("=============================");
-        } catch (Exception e) {
-            System.out.println("Error checking directory: " + e.getMessage());
-        }
-    }
 
     public void updateUserBasicInfo(Long userId, String firstName, String lastName) {
         User user = userRepository.findById(userId)

@@ -8,14 +8,12 @@ import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.EnrollmentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +22,8 @@ import java.util.List;
 @AllArgsConstructor
 public class EnrollmentService {
 
-    @Autowired
-    private EnrollmentRepository enrollmentRepository;
-    @Autowired
+    private  EnrollmentRepository enrollmentRepository;
     private UserService userService;
-    @Autowired
     private CourseRepository courseRepository;
 
 
@@ -83,13 +78,5 @@ public class EnrollmentService {
     public long getTotalEnrollmentsCount() {
         return enrollmentRepository.count();
     }
-
-    public long getRecentEnrollmentsCount(int days) {
-        LocalDateTime since = LocalDateTime.now().minusDays(days);
-        return enrollmentRepository.countByEnrolledAtAfter(since);
-    }
-
-
-
 }
 
