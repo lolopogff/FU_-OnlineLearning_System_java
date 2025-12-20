@@ -14,14 +14,39 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/**
+ * Сервис для управления профилями пользователей.
+ * Обеспечивает бизнес-логику для операций с профилями пользователей,
+ * включая обновление информации, загрузку изображений профиля и работу с файловой системой.
+ * Использует транзакционность для обеспечения целостности данных.
+ */
 @Service
 @Transactional
 public class UserProfileService {
 
+    /**
+     * Репозиторий для работы с пользователями.
+     */
     private final UserRepository userRepository;
+
+    /**
+     * Репозиторий для работы с профилями пользователей.
+     */
     private final UserProfileRepository userProfileRepository;
+
+    /**
+     * Корневая директория для хранения загруженных изображений профилей.
+     */
     private final Path rootLocation = Paths.get("uploads/profile-pictures");
 
+    /**
+     * Конструктор сервиса профилей пользователей.
+     * Инициализирует репозитории и создает директорию для хранения изображений профилей.
+     *
+     * @param userRepository репозиторий для работы с пользователями
+     * @param userProfileRepository репозиторий для работы с профилями пользователей
+     * @throws RuntimeException если не удается создать директорию для хранения файлов
+     */
     public UserProfileService(UserRepository userRepository,
                               UserProfileRepository userProfileRepository) {
         this.userRepository = userRepository;
@@ -35,7 +60,14 @@ public class UserProfileService {
         }
     }
 
-
+    /**
+     * Получает профиль пользователя по идентификатору пользователя.
+     * Если профиль не существует, создает новый профиль для пользователя.
+     *
+     * @param userId идентификатор пользователя
+     * @return профиль пользователя
+     * @throws RuntimeException если пользователь с указанным идентификатором не найден
+     */
     public UserProfile getUserProfile(Long userId) {
         return userProfileRepository.findByUserId(userId)
                 .orElseGet(() -> {
@@ -47,6 +79,16 @@ public class UserProfileService {
                 });
     }
 
+    /**
+     * Обновляет информацию профиля пользователя.
+     *
+     * @param userId идентификатор пользователя
+     * @param bio новая биография пользователя
+     * @param phone новый номер телефона
+     * @param location новое местоположение
+     * @param dateOfBirth новая дата рождения
+     * @param website новый веб-сайт
+     */
     public void updateUserProfile(Long userId, String bio, String phone,
                                   String location, LocalDate dateOfBirth, String website) {
         UserProfile profile = getUserProfile(userId);
@@ -59,6 +101,14 @@ public class UserProfileService {
         userProfileRepository.save(profile);
     }
 
+    /**
+     * Сохраняет изображение профиля пользователя.
+     * Генерирует уникальное имя файла для предотвращения конфликтов.
+     *
+     * @param userId идентификатор пользователя
+     * @param file загружаемый файл изображения
+     * @throws RuntimeException если файл пуст или произошла ошибка при сохранении
+     */
     public void saveProfilePicture(Long userId, MultipartFile file) {
         try {
             if (file.isEmpty()) {
@@ -85,6 +135,13 @@ public class UserProfileService {
         }
     }
 
+    /**
+     * Возвращает содержимое файла изображения профиля в виде массива байтов.
+     *
+     * @param filename имя файла изображения
+     * @return массив байтов содержимого файла
+     * @throws RuntimeException если произошла ошибка при чтении файла
+     */
     public byte[] getProfilePicture(String filename) {
         try {
             Path file = rootLocation.resolve(filename);
@@ -94,7 +151,15 @@ public class UserProfileService {
         }
     }
 
-
+    /**
+     * Обновляет базовую информацию пользователя (имя и фамилия).
+     * Выполняет валидацию входных данных.
+     *
+     * @param userId идентификатор пользователя
+     * @param firstName новое имя пользователя
+     * @param lastName новая фамилия пользователя
+     * @throws RuntimeException если пользователь не найден или имя/фамилия пусты
+     */
     public void updateUserBasicInfo(Long userId, String firstName, String lastName) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usdate_of_birther not found"));
@@ -112,6 +177,4 @@ public class UserProfileService {
 
         userRepository.save(user);
     }
-
-
 }

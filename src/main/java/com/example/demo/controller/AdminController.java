@@ -15,15 +15,43 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * Контроллер для обработки административных запросов.
+ * Предоставляет доступ к статистике и другим административным функциям.
+ * Доступ к методам контроллера разрешен только пользователям с ролью ADMIN.
+ */
 @Controller
 @RequestMapping("/admin")
 @AllArgsConstructor
 public class AdminController {
 
+    /**
+     * Сервис для работы с пользователями.
+     */
     private UserService userService;
+
+    /**
+     * Сервис для работы с курсами.
+     */
     private CourseService courseService;
+
+    /**
+     * Сервис для работы с записями на курсы.
+     */
     private EnrollmentService enrollmentService;
 
+    /**
+     * Обрабатывает запрос на отображение страницы статистики.
+     * Собирает и отображает различную статистическую информацию о системе,
+     * включая данные о пользователях, курсах, доходах и активности.
+     *
+     * Метод защищен аннотацией @PreAuthorize, которая проверяет наличие роли ADMIN
+     * у текущего пользователя. В случае ошибки при загрузке данных отображает
+     * страницу со значениями по умолчанию.
+     *
+     * @param model объект Model для передачи данных в представление
+     * @return имя шаблона представления "admin/statistics"
+     */
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/statistics")
     public String showStatistics(Model model) {
@@ -66,6 +94,14 @@ public class AdminController {
         return "admin/statistics";
     }
 
+    /**
+     * Устанавливает значения статистики по умолчанию в модель.
+     * Используется при возникновении ошибок при загрузке реальных данных.
+     * Все числовые значения устанавливаются в 0, строковые - в "N/A",
+     * списки - в пустые коллекции.
+     *
+     * @param model объект Model для установки атрибутов по умолчанию
+     */
     private void setDefaultStatistics(Model model) {
         model.addAttribute("totalUsers", 0L);
         model.addAttribute("totalCourses", 0L);

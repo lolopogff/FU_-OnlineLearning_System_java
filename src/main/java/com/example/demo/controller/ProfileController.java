@@ -14,18 +14,46 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 
+/**
+ * Контроллер для управления профилями пользователей.
+ * Обрабатывает операции просмотра, редактирования профиля, загрузки изображений
+ * и предоставления публичного доступа к профилям пользователей.
+ * Контроллер имеет имя "customProfileController" для явного указания в Spring контексте.
+ */
 @Controller("customProfileController")
 @RequestMapping("/user")
 public class ProfileController {
 
+    /**
+     * Сервис для работы с профилями пользователей.
+     */
     private final UserProfileService userProfileService;
+
+    /**
+     * Сервис для работы с пользователями.
+     */
     private final UserService userService;
 
+    /**
+     * Конструктор с внедрением зависимостей сервисов.
+     *
+     * @param userProfileService сервис для работы с профилями пользователей
+     * @param userService сервис для работы с пользователями
+     */
     public ProfileController(UserProfileService userProfileService, UserService userService) {
         this.userProfileService = userProfileService;
         this.userService = userService;
     }
 
+    /**
+     * Отображает профиль текущего пользователя.
+     * Включает информацию о пользователе, его профиле и ролях.
+     *
+     * @param principal объект Principal для получения имени текущего пользователя
+     * @param authentication объект Authentication для проверки ролей пользователя
+     * @param model объект Model для передачи данных в представление
+     * @return имя шаблона для отображения профиля "user/profile/view" или перенаправление на страницу входа
+     */
     @GetMapping("/profile")
     public String viewProfile(Principal principal, Authentication authentication, Model model) {
         try {
@@ -52,6 +80,13 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Отображает форму для редактирования профиля пользователя.
+     *
+     * @param principal объект Principal для получения имени текущего пользователя
+     * @param model объект Model для передачи данных в представление
+     * @return имя шаблона для редактирования профиля "user/profile/edit" или перенаправление на страницу входа
+     */
     @GetMapping("/profile/edit")
     public String editProfileForm(Principal principal, Model model) {
         try {
@@ -73,6 +108,22 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Обновляет профиль пользователя на основе данных из формы редактирования.
+     * Обрабатывает обновление основной информации, данных профиля и загрузку изображения.
+     *
+     * @param principal объект Principal для получения имени текущего пользователя
+     * @param bio новая биография пользователя
+     * @param phone новый телефон пользователя
+     * @param location новое местоположение пользователя
+     * @param dateOfBirth новая дата рождения пользователя (строка в формате yyyy-MM-dd)
+     * @param website новый веб-сайт пользователя
+     * @param firstName новое имя пользователя
+     * @param lastName новая фамилия пользователя
+     * @param file файл с новым изображением профиля (опционально)
+     * @param redirectAttributes атрибуты для передачи сообщений при перенаправлении
+     * @return перенаправление на страницу профиля или форму редактирования в случае ошибки
+     */
     @PostMapping("/profile/edit")
     public String updateProfile(Principal principal,
                                 @RequestParam String bio,
@@ -117,6 +168,14 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Обрабатывает загрузку изображения профиля пользователя.
+     *
+     * @param principal объект Principal для получения имени текущего пользователя
+     * @param file файл с изображением для загрузки
+     * @param redirectAttributes атрибуты для передачи сообщений при перенаправлении
+     * @return перенаправление на страницу профиля пользователя
+     */
     @PostMapping("/profile/upload-picture")
     public String uploadProfilePicture(Principal principal,
                                        @RequestParam("profilePicture") MultipartFile file,
@@ -141,7 +200,13 @@ public class ProfileController {
         }
     }
 
-
+    /**
+     * Отображает публичный профиль пользователя по имени пользователя.
+     *
+     * @param username имя пользователя, чей профиль нужно отобразить
+     * @param model объект Model для передачи данных в представление
+     * @return имя шаблона публичного профиля "user/profile/public" или перенаправление на список курсов
+     */
     @GetMapping("/profile/public/{username}")
     public String viewPublicProfile(@PathVariable String username, Model model) {
         try {
@@ -162,6 +227,12 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Возвращает изображение профиля пользователя в виде массива байтов.
+     *
+     * @param filename имя файла изображения (включая расширение)
+     * @return ResponseEntity с массивом байтов изображения и соответствующим Content-Type
+     */
     @GetMapping("/profile/picture/{filename:.+}")
     @ResponseBody
     public ResponseEntity<byte[]> getProfilePicture(@PathVariable String filename) {
