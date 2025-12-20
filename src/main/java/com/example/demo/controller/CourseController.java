@@ -18,14 +18,40 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Контроллер для управления курсами в системе.
+ * Обрабатывает запросы связанные с отображением, созданием, редактированием и удалением курсов.
+ * Доступ к различным операциям контролируется ролями пользователей.
+ */
 @Controller
 @RequestMapping("/courses")
 @AllArgsConstructor
 public class CourseController {
 
+    /**
+     * Сервис для работы с курсами.
+     */
     CourseService courseService;
+
+    /**
+     * Сервис для работы с пользователями.
+     */
     UserService userService;
 
+    /**
+     * Отображает список курсов с возможностью фильтрации и пагинации.
+     * Поддерживает фильтрацию по поисковому запросу, категории, преподавателю, цене.
+     *
+     * @param search поисковый запрос по названию или описанию курса (опционально)
+     * @param category категория курса для фильтрации (опционально)
+     * @param teacher имя преподавателя для фильтрации (опционально)
+     * @param minPriceStr минимальная цена курса в виде строки (опционально)
+     * @param maxPriceStr максимальная цена курса в виде строки (опционально)
+     * @param page номер текущей страницы для пагинации (по умолчанию 1)
+     * @param model объект Model для передачи данных в представление
+     * @param authentication объект Authentication для получения информации о текущем пользователе
+     * @return имя шаблона для отображения списка курсов "course/courses"
+     */
     @RequestMapping("/")
     public String listOfCourses(@RequestParam(value = "search", required = false) String search,
                                 @RequestParam(value = "category", required = false) String category,
@@ -90,6 +116,14 @@ public class CourseController {
         model.addAttribute("isAdmin", userService.hasRole(authentication, "ADMIN"));
         return "course/courses";
     }
+
+    /**
+     * Отображает форму для создания нового курса.
+     * Доступно только для пользователей с ролью TEACHER или ADMIN.
+     *
+     * @param model объект Model для передачи данных в представление
+     * @return имя шаблона для создания нового курса "course/new"
+     */
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     @RequestMapping("/new")
     public String newCourse(Model model) {
@@ -98,12 +132,27 @@ public class CourseController {
         return "course/new";
     }
 
+    /**
+     * Сохраняет новый курс или обновляет существующий.
+     *
+     * @param course объект Course с данными из формы
+     * @param auth объект Authentication для идентификации текущего пользователя
+     * @return перенаправление на страницу со списком курсов
+     */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String saveCourse(@ModelAttribute("course") Course course, Authentication auth) {
         courseService.save(course, auth);
         return "redirect:/courses/";
     }
 
+    /**
+     * Отображает форму для редактирования существующего курса.
+     * Доступно только для преподавателя, создавшего курс, или администратора.
+     *
+     * @param id идентификатор курса для редактирования
+     * @param principal объект Principal для проверки прав доступа
+     * @return ModelAndView с формой редактирования курса или перенаправлением
+     */
     @RequestMapping("/edit/{id}")
     @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
     public ModelAndView editCourse(@PathVariable Long id, Principal principal) {
@@ -121,6 +170,14 @@ public class CourseController {
         return mav;
     }
 
+    /**
+     * Удаляет курс по идентификатору.
+     * Доступно только для преподавателя, создавшего курс, или администратора.
+     *
+     * @param id идентификатор курса для удаления
+     * @param authentication объект Authentication для проверки прав доступа
+     * @return перенаправление на страницу со списком курсов
+     */
     @RequestMapping("/delete/{id}")
     @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN')")
     public String deleteCourse(@PathVariable("id") Long id, Authentication authentication) {
@@ -128,6 +185,14 @@ public class CourseController {
         return "redirect:/courses/";
     }
 
+    /**
+     * Отображает курсы текущего пользователя.
+     * Для преподавателя отображает созданные им курсы, для студента - курсы на которые он записан.
+     *
+     * @param model объект Model для передачи данных в представление
+     * @param authentication объект Authentication для получения текущего пользователя
+     * @return имя шаблона для отображения курсов пользователя "course/myCourses"
+     */
     @GetMapping("/myCourses")
     public String myCourses(Model model, Authentication authentication) {
         try {
@@ -146,6 +211,14 @@ public class CourseController {
         }
     }
 
+    /**
+     * Отображает детальную информацию о курсе.
+     *
+     * @param id идентификатор курса
+     * @param model объект Model для передачи данных в представление
+     * @param authentication объект Authentication для получения текущего пользователя
+     * @return имя шаблона для отображения деталей курса "course/course-details"
+     */
     @GetMapping("/details/{id}")
     public String courseDetails(@PathVariable Long id, Model model, Authentication authentication) {
         // Добавляем информацию о текущем пользователе
@@ -174,6 +247,13 @@ public class CourseController {
         }
     }
 
+    /**
+     * Отображает страницу информации об авторе/разработчике системы.
+     *
+     * @param model объект Model для передачи данных в представление
+     * @param authentication объект Authentication для получения текущего пользователя
+     * @return имя шаблона страницы об авторе "about/author"
+     */
     @GetMapping("/about/author")
     public String aboutAuthor(Model model, Authentication authentication) {
         // Добавляем роли для согласованности с другими страницами
